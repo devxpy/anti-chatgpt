@@ -243,7 +243,6 @@ async function _predict(input) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      url: url,
       input: input,
     }),
   });
