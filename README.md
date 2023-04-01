@@ -1,5 +1,7 @@
 # Anti-ChatGPT
 
+![IMG_8701](https://user-images.githubusercontent.com/19492893/229286436-e76af5ae-145d-4209-8c6e-068f39a9a78e.PNG)
+
 Its 2023, privacy is a myth and big tech companies are using us as data to feed us ADs, viral content to reduce our timespans, and even rig elections.
 
 With Anti-ChatGPT, you as an individual have the power to fight the AIs trying to manipulate you.
