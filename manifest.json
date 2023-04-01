@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Anti ChatGPT",
+  "version": "1.0",
+  "description": "",
+  "permissions": [
+    "storage",
+    "unlimitedStorage"
+  ],
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": [
+        "https://*/*"
+      ]
+    }
+  ],
+  "options_page": "options.html"
+}

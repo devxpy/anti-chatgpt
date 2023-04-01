@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My Test Extension Options</title>
+    <style>
+        p {
+            font-size: 1.2rem;
+        }
+        button {
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+<h1>
+    Anti-ChatGPT
+</h1>
+
+<p>
+<p><label for="rules">Blacklist - what content do you want to hide?</label></p>
+<textarea id="rules" rows="15" cols="100"></textarea>
+</p>
+
+
+<br>
+
+<p>
+<p><label for="elementSelector">CSS Selectors - what elements do you want to hide?</label></p>
+<textarea id="elementSelector" rows="10" cols="100"></textarea>
+</p>
+
+<br>
+
+<p>
+<button id="save">Save</button>
+</p>
+
+<p id="status"></p>
+
+<script src="scripts/options.js"></script>
+</body>
+</html>
