@@ -15,6 +15,7 @@ Here's an example of Anti-ChatGPT blocking politically biased tweets. You are no
 
 <img width="630" alt="image" src="https://user-images.githubusercontent.com/19492893/229278797-caa71725-53d9-412e-bbab-a6dfaa4809a0.png">
 
+You can play with the prompt used for this project [on gooey.ai](https://gooey.ai/compare-large-language-models/?example_id=e5e6tba3)
 
 ### Instructions
 
