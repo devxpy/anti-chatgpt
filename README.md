@@ -14,3 +14,11 @@ Simply tell Anti-ChatGPT what you don't want to see, and it will nuke it from yo
 Here's an example of Anti-ChatGPT blocking politically biased tweets. You are now safe :)
 
 <img width="630" alt="image" src="https://user-images.githubusercontent.com/19492893/229278797-caa71725-53d9-412e-bbab-a6dfaa4809a0.png">
+
+
+### Instructions
+
+1. Clone this project
+2. Update [config.js](scripts/config.js) with your openai API key, and the URL for [clip-interrogator](https://replicate.com/pharmapsychotic/clip-interrogator/api)
+3. Load this project as an unpacked chrome extension
+4. Open the [plugin options page](https://developer.chrome.com/docs/extensions/mv3/options/) to change the blacklist 
