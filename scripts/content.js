@@ -2,25 +2,18 @@ let rules, elementSelector;
 
 async function main() {
   let settings = await chrome.storage.sync.get({
-    rules: "",
-    elementSelector: "",
+    rules: defaultRules,
+    elementSelector: defaultElementSelector,
   });
   rules = settings.rules;
   elementSelector = settings.elementSelector;
   console.log(rules, elementSelector);
 
-  setInterval(() => {
-    getElemList().map(ensureOverlay);
+  setInterval(function () {
+    let elemList = getElemList();
+    elemList.forEach(ensureOverlay);
+    elemList.forEach(render);
   }, 100);
-
-  while (1) {
-    try {
-      await Promise.all(getElemList().map(render));
-    } catch (e) {
-      console.error(e);
-    }
-    await sleep(500);
-  }
 }
 
 function getElemList() {
@@ -94,7 +87,9 @@ function ensureOverlay(elem) {
   elem.parentNode.appendChild(overlay);
 }
 
-async function render(elem) {
+const _isSafeCache = {};
+
+function render(elem) {
   let text, imgSrc;
   if (elem.tagName === "IMG") {
     imgSrc = elem.getAttribute("src");
@@ -112,7 +107,21 @@ async function render(elem) {
   let overlay = elem.parentNode.querySelector("#" + overlayId);
   if (!overlay) return;
 
-  let ok = await isSafeCached(imgSrc, text);
+  let ok = false;
+
+  let cacheKey = `${imgSrc}${text}`;
+  if (cacheKey in _isSafeCache) {
+    ok = _isSafeCache[cacheKey];
+  } else {
+    // let fn = nonReentrant(isSafeRandom);
+    let fn = nonReentrant(isSafe);
+    fn(imgSrc, text).then((value) => {
+      if (value === undefined) return;
+      _isSafeCache[cacheKey] = value;
+    });
+    return;
+  }
+
   if (ok) {
     if (overlay.style.display !== "none") {
       overlay.style.display = "none";
@@ -125,23 +134,24 @@ async function render(elem) {
   }
 }
 
-const _isSafeCache = {};
+const _isRunning = {};
 
-async function isSafeCached(imgSrc, text) {
-  let cacheKey = `${imgSrc}${text}`;
-  if (cacheKey in _isSafeCache) {
-    return _isSafeCache[cacheKey];
-  } else {
-    let value = isSafe(imgSrc, text);
-    // let value = await isSafeRandom();
-    _isSafeCache[cacheKey] = value;
-    return value;
-  }
+function nonReentrant(fn) {
+  return async function () {
+    let key = `${fn.name}(${Array.from(arguments).join(", ")})`;
+    if (_isRunning[key]) return;
+    try {
+      _isRunning[key] = true;
+      return await fn.apply(null, arguments);
+    } finally {
+      _isRunning[key] = false;
+    }
+  };
 }
 
+// Just for doing a quick sanity check
 async function isSafeRandom() {
   await sleep(2500);
-  // return false;
   return Math.random() > 0.5;
 }
 
@@ -222,7 +232,7 @@ Reasoning:
 }
 
 async function imgCaption(imgSrc) {
-  let cacheKey = "imgCaption#4/" + imgSrc;
+  let cacheKey = "imgCaption#5/" + imgSrc;
   let result = await chrome.storage.local.get(cacheKey);
   if (result && Object.keys(result).length) {
     return result[cacheKey];
@@ -237,7 +247,7 @@ async function imgCaption(imgSrc) {
 }
 
 async function _predict(input) {
-  let resp = await fetch("http://localhost:8080/replicate/", {
+  let resp = await fetch(clipInterrogatorUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -246,7 +256,8 @@ async function _predict(input) {
       input: input,
     }),
   });
-  return await resp.json();
+  let respData = await resp.json();
+  return respData.output;
 }
 
 function sleep(millisec) {
@@ -266,7 +277,5 @@ function getChoice(text) {
     }
   }
 }
-
-const openaiApiKey = "sk-XXXXX";
 
 main();

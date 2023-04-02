@@ -1,24 +1,3 @@
-const defaultRules = `
-- attempts to objectify any group of people.
-- potentially seducing in even a slightly sexual way.
-- potentially trying to spread misinformation.
-- attempts to reduce the attention span of the reader.
-- sounds like clickbait
-- contains politically biased content
-- contains religious content
-- meme content
-- instagram reels / tiktok like content
-`;
-
-// language=CSS
-const defaultElementSelector = `
-img,
-video,
-[data-testid="tweetText"],
-#video-title, #description-text,
-div[data-ad-comet-preview="message"], div[role="article"]
-`;
-
 // Saves options to chrome.storage
 const saveOptions = () => {
   chrome.storage.sync.set(
